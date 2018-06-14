@@ -6,11 +6,26 @@ class User(db.Model):
     username = db.Column(db.String(80),unique=True)
     password = db.Column(db.String(120))
     info = db.relationship('Info', backref='user',
-                           uselist=False, lazy='dynamic')
+                           uselist=False)
 
     def __init__(self, username, password):
         self.username = username
         self.password = password
 
+
+    @staticmethod
+    def query_by_login(username,password):
+        user = User.query.filter_by(username=username)
+        if user is None:
+            return 'user does not exist!'
+        else:
+            user = User.query.filter_by(username=username,password=password)
+            if user is None:
+                return 'password does not correct!'
+            else:
+                return True
+
+
     def __repr__(self):
         return '<User %r>' % self.username
+
