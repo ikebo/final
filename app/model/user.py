@@ -15,11 +15,11 @@ class User(db.Model):
 
     @staticmethod
     def query_by_login(username,password):
-        user = User.query.filter_by(username=username)
+        user = User.query.filter_by(username=username).first()
         if user is None:
             return 'user does not exist!'
         else:
-            user = User.query.filter_by(username=username,password=password)
+            user = User.query.filter_by(username=username,password=password).first()
             if user is None:
                 return 'password does not correct!'
             else:
