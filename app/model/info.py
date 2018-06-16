@@ -10,12 +10,13 @@ class Info(db.Model):
     avgScore = db.Column(db.Float)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    def __init__(self, realName, oneScore, twoScore, threeScore):
+    def __init__(self, realName='未填写', oneScore=-1, twoScore=-1, threeScore=-1):
         self.realName = realName
         self.oneScore = oneScore
         self.twoScore = twoScore
         self.threeScore = threeScore
-        self.avgScore = (oneScore+twoScore+threeScore)/3.0
+        self.avgScore = (oneScore+twoScore+threeScore)/3.0 if not \
+            oneScore == 1 and twoScore == 1 and threeScore == 1 else -1
 
     def __repr__(self):
         return '{}: {}'.format(self.realName, self.avgScore)

@@ -23,7 +23,7 @@ class User(db.Model):
             if user is None:
                 return 'password does not correct!'
             else:
-                return True
+                return user
 
 
     def __repr__(self):

@@ -2,7 +2,8 @@ from app.utils.log import Log
 from . import home
 from flask import render_template, request, flash, session, redirect, url_for
 from app.model.user import User
-from app.forms.user import LoginForm
+from app.forms.user import LoginForm, RegisterForm
+from app import db
 
 @home.route('/', methods=['GET','POST'])
 def index():
@@ -10,8 +11,8 @@ def index():
     form = LoginForm(request.form)
     if request.method == 'POST' and form.validate():
         user = User.query_by_login(form.username.data,form.password.data)
-        if user == True:
-            session['username'] = form.username.data
+        if type(user) != str:
+            session['userId'] = user.id
             flash('Logged in as {}'.format(form.username.data))
             return redirect(url_for('home.index'))
         else:
@@ -24,6 +25,19 @@ def index():
 
 @home.route('/logout')
 def logout():
-    session.pop('username')
+    session.pop('userId')
     flash('logged out')
     return redirect(url_for('home.index'))
+
+
+@home.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegisterForm(request.form)
+    if request.method == 'POST' and form.validate():
+        user = User(form.username.data,form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        session['userId'] = user.id
+        flash('注册成功，已自动登录！')
+        return redirect(url_for('home.index'))
+    return render_template('home/index.html',form=form, register=True)
