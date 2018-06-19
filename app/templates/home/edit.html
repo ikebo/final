@@ -1,0 +1,46 @@
+{% extends "home/base.html" %}
+
+{% block title %} Edit {% endblock %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+    <form action="{{ url_for('home.edit') }}"  method="POST" class="form-horizontal">
+        <div class="form-group">
+            <label for="realName" class="col-md-2 control-label">姓名</label>
+            <div class="col-md-8">
+            <input type="text" class="form-control" name="realName" id="realName" value="{{ info.realName }}">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="oneScore" class="col-md-2 control-label">C成绩</label>
+            <div class="col-md-8">
+            <input type="text" class="form-control" name="oneScore" id="oneScore" value="{{ info.oneScore if not info.oneScore == -1 else '未填写' }}">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="twoScore" class="col-md-2 control-label">C++成绩</label>
+            <div class="col-md-8">
+            <input type="text" class="form-control" name="twoScore" id="twoScore" value="{{ info.twoScore if not info.twoScore == -1 else '未填写' }}">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="threeScore" class="col-md-2 control-label">Python成绩</label>
+            <div class="col-md-8">
+            <input type="text" class="form-control" name="threeScore" id="threeScore" value="{{ info.threeScore if not info.threeScore == -1 else '未填写' }}">
+            <button class="btn-lg btn-success" style="float: right; margin-top: 20px;">提交</button>
+            </div>
+        </div>
+
+    </form>
+    </div>
+    <div class="col-md-2"></div>
+
+{% endblock %}

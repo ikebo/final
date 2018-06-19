@@ -4,8 +4,39 @@
 
 {% block head %}
     {{ super() }}
+    <style>
+        .table {
+            font-size: large;
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
-    My Information
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <table class="table table-bordered" style="text-align: center">
+            <tr>
+                <td class="text-warning">姓名</td>
+                <td class="text-primary">{{ info.realName }}</td>
+            </tr>
+            <tr>
+                <td class="text-warning">C成绩</td>
+                <td class="text-primary">{{ info.oneScore if not info.oneScore == -1 else '未填写' }}</td>
+            </tr>
+            <tr>
+                <td class="text-warning">C++成绩</td>
+                <td class="text-primary">{{ info.twoScore if not info.twoScore == -1 else '未填写' }}</td>
+            </tr>
+            <tr>
+                <td class="text-warning">Python成绩</td>
+                <td class="text-primary">{{ info.threeScore if not info.threeScore == -1 else '未填写'}}</td>
+            </tr>
+            <tr>
+                <td class="text-warning">平均成绩</td>
+                <td class="text-primary">{{ round(info.avgScore,2) if not info.avgScore == -1 else '未填写' }}</td>
+            </tr>
+        </table>
+        <a href="{{ url_for('home.edit') }}" style="float: right"><input type="submit" class="btn btn-lg btn-info" value="修改信息"></a>
+    </div>
+    <div class="col-md-3"></div>
 {% endblock %}

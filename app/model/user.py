@@ -1,3 +1,4 @@
+from app.model.info import Info
 from . import db
 
 class User(db.Model):
@@ -11,6 +12,10 @@ class User(db.Model):
     def __init__(self, username, password):
         self.username = username
         self.password = password
+        info = Info(self.id)
+        db.session.add(info)
+        db.session.commit()
+        self.info = info
 
 
     @staticmethod

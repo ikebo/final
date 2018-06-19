@@ -1,3 +1,4 @@
+from app.model.info import Info
 from app.utils.log import Log
 from . import home
 from flask import render_template, request, flash, session, redirect, url_for
@@ -7,7 +8,7 @@ from app import db
 
 @home.route('/', methods=['GET','POST'])
 def index():
-    Log(session)
+    infos = Info.query.order_by(Info.avgScore.desc()).all()
     form = LoginForm(request.form)
     if request.method == 'POST' and form.validate():
         user = User.query_by_login(form.username.data,form.password.data)
@@ -20,7 +21,7 @@ def index():
             flash(errorMsg, category='login_error')
             return redirect(url_for('home.index'))
     # 传入form用于显示error信息
-    return render_template('home/index.html',form=form)
+    return render_template('home/index.html',form=form,infos=infos,round=round)
 
 
 @home.route('/logout')
@@ -33,6 +34,7 @@ def logout():
 @home.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm(request.form)
+    infos = Info.query.order_by(Info.avgScore.desc()).all()
     if request.method == 'POST' and form.validate():
         user = User(form.username.data,form.password.data)
         db.session.add(user)
@@ -40,4 +42,4 @@ def register():
         session['userId'] = user.id
         flash('注册成功，已自动登录！')
         return redirect(url_for('home.index'))
-    return render_template('home/index.html',form=form, register=True)
+    return render_template('home/index.html',form=form, register=True, infos=infos, round=round)
