@@ -1,0 +1,16 @@
+{% extends "home/base.html" %}
+
+{% block title %} Upload {% endblock %}
+
+{% block content %}
+
+    <form action="{{ url_for('home.upload') }}" method="POST" class="form-horizontal" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="img">头像</label>
+            <input type="file" id="img" name="img">
+            <input type="submit" value="上传" class="btn btn-sm btn-info">
+        </div>
+    </form>
+
+
+{% endblock %}

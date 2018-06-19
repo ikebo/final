@@ -8,36 +8,54 @@
 
 {% block content %}
     <div class="col-md-12">
-        <h3 class="text-danger" style="margin-top: 0; margin-bottom: 40px;">成绩排名：</h3>
-    </div>
-    {% for info in infos %}
-    <div class="col-md-1">
-    <h4 class="text-success">[ {{ loop.index }} ]</h4>
-    </div>
-    <div class="col-md-5">
-        <table class="table table-bordered" style="text-align: center">
+        <h3 class="text-danger" style="margin-top: 0;">成绩排名：</h3>
+    <table class="table">
+        <tr>
+            <th>排名</th>
+            <th>头像</th>
+            <th>姓名</th>
+            <th>C</th>
+            <th>C++</th>
+            <th>Python</th>
+            <th>平均分</th>
+        </tr>
+        {% for info in infos %}
             <tr>
-                <td class="text-warning">姓名</td>
-                <td class="text-primary">{{ info.realName }}</td>
+                <td>{{ loop.index+(pagination.page-1)*pagination.per_page }}</td>
+                <td><img src="{{ info.img }}" alt="img" width="30px" height="30px"></td>
+                <td>{{ info.realName }}</td>
+                <td>{{ info.oneScore if not info.oneScore == -1 else '未填写' }}</td>
+                <td>{{ info.twoScore if not info.twoScore == -1 else '未填写' }}</td>
+                <td>{{ info.threeScore if not info.threeScore == -1 else '未填写'}}</td>
+                <td>{{ round(info.avgScore,2) if not info.avgScore == -1 else '未填写' }}</td>
             </tr>
-            <tr>
-                <td class="text-warning">C成绩</td>
-                <td class="text-primary">{{ info.oneScore if not info.oneScore == -1 else '未填写' }}</td>
-            </tr>
-            <tr>
-                <td class="text-warning">C++成绩</td>
-                <td class="text-primary">{{ info.twoScore if not info.twoScore == -1 else '未填写' }}</td>
-            </tr>
-            <tr>
-                <td class="text-warning">Python成绩</td>
-                <td class="text-primary">{{ info.threeScore if not info.threeScore == -1 else '未填写'}}</td>
-            </tr>
-            <tr>
-                <td class="text-warning">平均成绩</td>
-                <td class="text-primary">{{ round(info.avgScore,2) if not info.avgScore == -1 else '未填写' }}</td>
-            </tr>
-        </table>
+
+        {% endfor %}
+    </table>
     </div>
 
+
+
+    <ul class="pagination" style="margin-left: 40%;">
+    <li>
+        {% if infos %}
+        <a href="{{ url_for('home.index',page=pagination.page-1) if pagination.has_prev else '#' }}" aria-label="Previous">
+             <span aria-hidden="true">&laquo;</span>
+        </a>
+        {% endif %}
+    </li>
+
+    {% for p in pagination.iter_pages() %}
+        <li>
+            <a href="{{ url_for('home.index',page=p) }}">{{ p }}</a>
+        </li>
     {% endfor %}
+    <li>
+        {% if infos %}
+        <a href="{{ url_for('home.index',page=pagination.page+1) if pagination.has_next else '#'}}" aria-label="Next" >
+             <span aria-hidden="true">&raquo;</span>
+        </a>
+        {% endif %}
+    </li>
+    </ul>
 {% endblock %}
