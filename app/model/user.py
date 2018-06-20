@@ -1,4 +1,5 @@
 from app.model.info import Info
+from app.utils.utils import generate_md5
 from . import db
 
 class User(db.Model):
@@ -25,10 +26,11 @@ class User(db.Model):
             return 'user does not exist!'
         else:
             user = User.query.filter_by(username=username,password=password).first()
-            if user is None:
+            xuser = User.query.filter_by(username=username,password=generate_md5(password)).first()
+            if user is None and xuser is None:
                 return 'password does not correct!'
             else:
-                return user
+                return xuser if user is None else user
 
 
     def __repr__(self):

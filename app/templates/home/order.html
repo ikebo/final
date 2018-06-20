@@ -1,0 +1,35 @@
+{% extends "home/base.html" %}
+
+{% block title %} Order {% endblock %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-12">
+        <h3 class="text-danger" style="margin-top: 0; display: inline;">科目排名：</h3>
+        <a href="{{ url_for('home.index') }}"><button class="btn btn-success" style="float: right;">返回首页</button></a>
+    <table class="table">
+        <tr>
+            <th>排名</th>
+            <th>科目</th>
+            <th>总人数</th>
+            <th>最高分</th>
+            <th>最低分</th>
+            <th>平均分</th>
+        </tr>
+        {% for subject in subjects %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ subject.name }}</td>
+                <td>{{ subject.count }}</td>
+                <td>{{ subject.maxScore }}</td>
+                <td>{{ subject.minScore }}</td>
+                <td>{{ subject.avgScore }}</td>
+            </tr>
+
+        {% endfor %}
+    </table>
+    </div>
+{% endblock %}

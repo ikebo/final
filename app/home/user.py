@@ -2,7 +2,7 @@ from werkzeug.exceptions import RequestEntityTooLarge
 
 from app.model.info import Info
 from app.utils.log import Log
-from app.utils.utils import allowed_file, get_fileRoute
+from app.utils.utils import allowed_file, get_fileRoute, generate_md5
 from . import home
 from flask import render_template, request, flash, session, redirect, url_for
 from app.model.user import User
@@ -15,7 +15,7 @@ from werkzeug.utils import secure_filename
 def index(page=1):
     target = request.args.get('target',None)
     if not target:
-        pagination = Info.query.order_by(Info.avgScore.desc()).paginate(page,per_page=2,error_out=False)
+        pagination = Info.query.order_by(Info.avgScore.desc()).paginate(page,per_page=5,error_out=False)
         infos = pagination.items
     else:
         pagination = Info.query.filter(Info.realName.like('%{}%'.format(target))).order_by(Info.avgScore.desc()).paginate(page,per_page=2,error_out=False)
@@ -47,10 +47,10 @@ def logout():
 @home.route('/register/<int:page>')
 def register(page=1):
     form = RegisterForm(request.form)
-    pagination = Info.query.order_by(Info.avgScore.desc()).paginate(page, per_page=2, error_out=False)
+    pagination = Info.query.order_by(Info.avgScore.desc()).paginate(page, per_page=5, error_out=False)
     infos = pagination.items
     if request.method == 'POST' and form.validate():
-        user = User(form.username.data,form.password.data)
+        user = User(form.username.data,generate_md5(form.password.data))
         db.session.add(user)
         db.session.commit()
         session['userId'] = user.id
